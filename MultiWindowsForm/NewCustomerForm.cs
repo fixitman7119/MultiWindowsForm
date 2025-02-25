@@ -13,15 +13,25 @@ namespace MultiWindowsForm
     public partial class NewCustomerForm : Form
     {
         private MainForm _mainForm;
-        private int CustomerCount = 0;
+        private int CustomerCount;
+        private bool IsEditing;
         public NewCustomerForm(MainForm form)
         {
             InitializeComponent();
             _mainForm = form;
-            CustomerCount++;
+            CustomerCount = 1;
+            IsEditing = false;
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
+        public void ToggleEdit(bool newState)
+        {
+            IsEditing = newState;
+            
+            // tell the main form what our customer looks like
+            _mainForm.EditCustomer(0,new Customer());
+        }
+
+        private void CreateCustomer()
         {
             // validation
             // create a customer and load it with data from the form
@@ -36,10 +46,33 @@ namespace MultiWindowsForm
             // send that data to the AddCustomer function on the parent from
             _mainForm.AddCustomer(customer);
             CustomerCount++;
+        }
+
+        private void EditCustomer()
+        {
+            MessageBox.Show("Form is being edited.");
+        }
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (IsEditing)
+            {
+
+
+                // edit item in place
+                EditCustomer();
+            }
+            else
+            {
+                // create a new customer
+                CreateCustomer();
+
+            }
+           
 
             // clear the new customer form\
             ClearForm();
             // close the form
+            Hide();
 
         }
 
