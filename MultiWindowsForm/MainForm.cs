@@ -38,9 +38,23 @@ namespace MultiWindowsForm
             ReloadDataGrid();
         }
 
-        public void EditCustomer(int id, Customer customer)
+        public void EditCustomer(int id, Customer updatedCustomer)
         {
             MessageBox.Show("Main form is editing the customer now.");
+
+            // find the customer out of the list by id
+            var cust = _customerList.Find(c => c.CustomerId == id);
+
+            // did we get a customer
+            if (cust != null)
+            {
+                // found one, process the customer
+                cust.Name = updatedCustomer.Name;
+                cust.PhoneNumber = updatedCustomer.PhoneNumber;
+                cust.Email = updatedCustomer.Email;
+                ReloadDataGrid();
+            }
+
         }
 
         private void btnEdit_Click(object sender, EventArgs e)

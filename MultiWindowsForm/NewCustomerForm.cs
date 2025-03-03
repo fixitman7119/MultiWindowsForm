@@ -15,25 +15,51 @@ namespace MultiWindowsForm
         private MainForm _mainForm;
         private int CustomerCount;
         private bool IsEditing;
+        private int CurrentSelectionId;
+        private bool IsEmptyText;
+        private bool CheckValidity;
         public NewCustomerForm(MainForm form)
         {
             InitializeComponent();
             _mainForm = form;
             CustomerCount = 1;
             IsEditing = false;
+            CurrentSelectionId = - 1;
         }
 
         public void ToggleEdit(bool newState)
         {
             IsEditing = newState;
             
-            // tell the main form what our customer looks like
-            _mainForm.EditCustomer(0,new Customer());
+            
         }
 
         private void CreateCustomer()
         {
             // validation
+            
+            
+                // show an error
+                if (Validators.IsEmptyText(txtName))
+                {
+                    MessageBox.Show("Name is empty.  Please enter a name.");
+                    return;
+                }
+
+                if (Validators.IsEmptyText(txtEmail))
+                {
+                    MessageBox.Show("Email is empty.  Please enter an Email.");
+                    return;
+                }
+
+                if (Validators.IsEmptyText(txtPhoneNumber))
+                {
+                MessageBox.Show("Phone number is empty.  Please enter a Phone number.");
+                }
+
+                //  retun and try again
+            
+
             // create a customer and load it with data from the form
             Customer customer = new Customer
             {
@@ -48,9 +74,45 @@ namespace MultiWindowsForm
             CustomerCount++;
         }
 
+        //private bool CheckValidity()
+        //{
+        //    //some logic here to validate the vareouse imputs
+            
+        //}
+
         private void EditCustomer()
         {
+            //validater here exit early if invalid
+            if (Validators.IsEmptyText(txtName))
+            {
+                MessageBox.Show("Name is empty.  Please enter a name.");
+                return;
+            }
+
+            if (Validators.IsEmptyText(txtEmail))
+            {
+                MessageBox.Show("Email is empty.  Please enter an Email.");
+                return;
+            }
+
+            if (Validators.IsEmptyText(txtPhoneNumber))
+            {
+                MessageBox.Show("Phone number is empty.  Please enter a Phone number.");
+            }
+
             MessageBox.Show("Form is being edited.");
+            // tell the main form what our customer looks like
+            _mainForm.EditCustomer(CurrentSelectionId, new Customer
+            {
+                CustomerId = CurrentSelectionId,
+                Name = txtName.Text,
+                PhoneNumber = txtPhoneNumber.Text,
+                Email = txtEmail.Text,
+
+            });
+
+            CurrentSelectionId = -1;
+            ToggleEdit(false);
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
@@ -85,6 +147,7 @@ namespace MultiWindowsForm
 
         public void LoadCustomer(Customer customer)
         {
+            CurrentSelectionId = customer.CustomerId;
             txtName.Text= customer.Name;
             txtPhoneNumber.Text= customer.PhoneNumber;
             txtEmail.Text= customer.Email;

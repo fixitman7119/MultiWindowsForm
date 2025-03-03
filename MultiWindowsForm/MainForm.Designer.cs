@@ -62,6 +62,7 @@
             dgvCustomers.Location = new Point(1, 41);
             dgvCustomers.MultiSelect = false;
             dgvCustomers.Name = "dgvCustomers";
+            dgvCustomers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCustomers.Size = new Size(799, 408);
             dgvCustomers.TabIndex = 2;
             // 
